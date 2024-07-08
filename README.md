@@ -53,9 +53,9 @@ export class TranslateService extends BaseTranslateService<
     // Load the translations for the given language
     switch (lang) {
       case 'en':
-        return import('./en.json');
+        return import('./en.json').then(x => x.default);
       case 'de':
-        return import('./de.json');
+        return import('./de.json').then(x => x.default);
       default:
         // Only languages that are in the available languages array are passed
         // so this should never happen
