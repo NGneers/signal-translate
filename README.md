@@ -38,7 +38,7 @@ import type translations from './en.json';
 @Injectable({ providedIn: 'root' })
 export class TranslateService extends BaseTranslateService<
   // Provide the type of the translations object for one language
-  translations
+  typeof translations
 > {
   constructor() {
     super(
@@ -49,7 +49,7 @@ export class TranslateService extends BaseTranslateService<
     );
   }
 
-  protected loadTranslations(lang: string): Promise<translations> {
+  protected loadTranslations(lang: string): Promise<typeof translations> {
     // Load the translations for the given language
     switch (lang) {
       case 'en':
