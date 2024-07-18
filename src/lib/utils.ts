@@ -7,7 +7,7 @@ export function getDeepValue<T extends Record<string, unknown> | undefined>(
   path: string[]
 ): unknown {
   return path.reduce<Record<string, unknown> | null | undefined>(
-    (xs, x) => (xs && xs[x] ? (xs[x] as Record<string, unknown>) : undefined),
+    (xs, x) => xs?.[x] as any,
     obj
   );
 }

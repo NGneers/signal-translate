@@ -30,6 +30,17 @@ describe('getDeepValue', () => {
     expect(getDeepValue(obj, ['a', 'b', 'c'])).toBe('value');
   });
 
+  it('should return the deep falsy value of an object', () => {
+    const obj = {
+      a: {
+        b: {
+          c: 0,
+        },
+      },
+    };
+    expect(getDeepValue(obj, ['a', 'b', 'c'])).toBe(0);
+  });
+
   it('should return undefined if the path does not exist', () => {
     const obj = {
       a: {
