@@ -11,7 +11,7 @@
   "type": "module",
   "prettier": "@ngneers/prettier-config",
   "scripts": {
-    "lint": "pnpm eslint ./src/**",
+    "lint": "eslint ./src/**",
     "test": "jest",
     "build": "ng build"
   },

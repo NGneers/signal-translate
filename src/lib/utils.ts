@@ -7,6 +7,7 @@ export function getDeepValue<T extends Record<string, unknown> | undefined>(
   path: string[]
 ): unknown {
   return path.reduce<Record<string, unknown> | null | undefined>(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (xs, x) => xs?.[x] as any,
     obj
   );
