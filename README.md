@@ -30,7 +30,7 @@ This library provides a way to easily provide translations in the form of signal
 ## Usage Example 🚀
 
 ```ts
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { BaseTranslateService, InterpolatePipe, interpolate } from '@ngneers/signal-translate';
 
 import type translations from './en.json';
@@ -79,6 +79,12 @@ export class TranslateService extends BaseTranslateService<
     -->
     <h2>{{ translations.greetings() | interpolate: { name: 'John' } }}</h2>
 
+    <!--
+      You can access translations unsafely with an unspecified string using the _unsafe property.
+      This is useful for translations that are not known at compile time.
+    -->
+    <h2>{{ translations._unsafe["status_" + status()]() }}</h2>
+
     <button (click)="setLanguage('de')">Change language to german</button>
   `,
 })
@@ -87,6 +93,8 @@ export class AppComponent {
 
   // Retrieve the translations signal
   protected readonly translations = _translateService.translations;
+
+  protected readonly status = signal<string>('vip');
 
   public setLanguage(lang: string): void {
     // Set the language
