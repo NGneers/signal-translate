@@ -18,10 +18,13 @@ export type TranslateKeys<T, TSeparator extends string> = T extends object
             }[keyof T]
   : never;
 
+export type TranslationSignal<TKey extends string = string> = Signal<string> & { key: TKey };
+
 export type TranslationsSignal<
   T extends Record<string, unknown>,
   TSeparator extends string,
-> = Signal<T> &
-  Readonly<{
-    [K in TranslateKeys<T, TSeparator>]: Signal<string> & { key: K };
-  }>;
+> = Signal<T> & {
+  readonly [K in TranslateKeys<T, TSeparator>]: TranslationSignal<K>;
+} & {
+  readonly _unsafe: Readonly<Record<string, TranslationSignal>>;
+};

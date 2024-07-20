@@ -1,6 +1,6 @@
 import { Signal } from '@angular/core';
-import { Expect, Equal } from '../test-types';
-import { TranslateKeys, TranslationsSignal } from './types';
+import { Expect, Equal, ExtendsBoth } from '../test-types';
+import { TranslateKeys, TranslationSignal, TranslationsSignal } from './types';
 
 describe('TranslateKeys', () => {
   it('should generate keys from object type', () => {
@@ -51,11 +51,12 @@ describe('TranslationsSignal', () => {
     };
     type actual = TranslationsSignal<input, '_'>;
     type expected = Signal<input> & {
-      readonly a: Signal<string> & { key: 'a' };
-      readonly b_c: Signal<string> & { key: 'b_c' };
-      readonly b_d_e: Signal<string> & { key: 'b_d_e' };
+      readonly a: TranslationSignal<'a'>;
+      readonly b_c: TranslationSignal<'b_c'>;
+      readonly b_d_e: TranslationSignal<'b_d_e'>;
+      readonly _unsafe: Readonly<Record<string, TranslationSignal>>;
     };
 
-    type test = Expect<Equal<actual, expected>>;
+    type test = Expect<ExtendsBoth<actual, expected>>;
   });
 });

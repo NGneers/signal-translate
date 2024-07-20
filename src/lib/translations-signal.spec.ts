@@ -25,4 +25,38 @@ describe('toTranslationsSignal', () => {
     expect(translations.b_d_e()).toBe('Test E');
     expect(translations.b_d_e.key).toBe('b_d_e');
   });
+
+  it('should return empty string for unknown keys', () => {
+    const originalSignal = signal(testTranslations);
+    const translations = toTranslationsSignal(originalSignal, '_') as any;
+
+    expect(translations.unknown()).toBe('');
+  });
+
+  it('should return undefined for unknown keys with wrong type', () => {
+    const originalSignal = signal(testTranslations);
+    const translations = toTranslationsSignal(originalSignal, '_') as any;
+
+    expect(translations[Symbol()]).toBeUndefined();
+  });
+
+  it('should provide a way to get translations using unsafe key', () => {
+    const originalSignal = signal(testTranslations);
+    const translations = toTranslationsSignal(originalSignal, '_');
+
+    expect(translations._unsafe.a()).toBe('Test A');
+    expect(translations._unsafe.a.key).toBe('a');
+  });
+
+  it('should not create a new signal for the same key', () => {
+    const originalSignal = signal(testTranslations);
+    const translations = toTranslationsSignal(originalSignal, '_');
+
+    const a1 = translations.a;
+    const a2 = translations.a;
+    const a3 = translations._unsafe.a;
+
+    expect(a1).toBe(a2);
+    expect(a1).toBe(a3);
+  });
 });
