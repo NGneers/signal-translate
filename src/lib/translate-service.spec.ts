@@ -1,6 +1,11 @@
 import { Inject, Injectable, InjectionToken, Optional } from '@angular/core';
 import { BaseCustomSeperatorTranslateService, BaseTranslateService } from './translate-service';
 import { TestBed } from '@angular/core/testing';
+import { interpolate } from './interpolate';
+
+jest.mock('./interpolate', () => ({
+  interpolate: jest.fn((value: string) => `${value} Interpolated`),
+}));
 
 const testTranslations = {
   en: {
@@ -168,6 +173,11 @@ describe('BaseCustomSeperatorTranslateService', () => {
 
     it('should return the key if translation is not found', () => {
       expect(sut.translate('unknown')).toBe('unknown');
+    });
+
+    it('should interpolate a key', () => {
+      expect(sut.translate('a', { value: 'Interpolated' })).toBe('Test A (en) Interpolated');
+      expect(interpolate).toHaveBeenCalledWith('Test A (en)', { value: 'Interpolated' });
     });
   });
 

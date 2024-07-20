@@ -31,11 +31,11 @@ describe('toTranslationsSignal', () => {
     expect(translations.b_d_e.key).toBe('b_d_e');
   });
 
-  it('should return empty string for unknown keys', () => {
+  it('should return key for unknown keys', () => {
     const originalSignal = signal(testTranslations);
     const translations = toTranslationsSignal(originalSignal, '_') as any;
 
-    expect(translations.unknown()).toBe('');
+    expect(translations.unknown()).toBe('unknown');
   });
 
   it('should return undefined for unknown keys with wrong type', () => {

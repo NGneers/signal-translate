@@ -1,8 +1,9 @@
 import { computed, effect, signal, WritableSignal } from '@angular/core';
 
+import { interpolate } from './interpolate';
 import { toTranslationsSignal } from './translations-signal';
 import { TranslateKeys, TranslationsSignal } from './types';
-import { getDeepValue } from './utils';
+import { getTranslation } from './utils';
 
 /**
  * Base class for a translation service.
@@ -61,9 +62,12 @@ export abstract class BaseCustomSeperatorTranslateService<
     });
   }
 
-  public translate(key: TranslateKeys<T, TSeparator> | Omit<string, TranslateKeys<T, TSeparator>>) {
-    const path = (key as string).split(this._separator);
-    return (getDeepValue(this.translations(), path) as string) ?? key;
+  public translate(
+    key: TranslateKeys<T, TSeparator> | Omit<string, TranslateKeys<T, TSeparator>>,
+    interpolateParams?: Record<string, unknown> | null | undefined
+  ): string {
+    const translation = getTranslation(this.translations(), key as string, this._separator);
+    return interpolateParams ? interpolate(translation, interpolateParams) : translation;
   }
 
   public setLanguage(language: string | null) {

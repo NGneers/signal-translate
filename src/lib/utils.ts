@@ -9,3 +9,11 @@ export function getDeepValue<T extends Record<string, unknown> | undefined>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return path.reduce<unknown>((xs, x) => (xs as any)?.[x], obj);
 }
+
+export function getTranslation<T extends Record<string, unknown> | undefined>(
+  translations: T,
+  key: string,
+  separator: string
+): string {
+  return String(getDeepValue(translations, key.split(separator)) ?? key);
+}

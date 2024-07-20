@@ -2,7 +2,7 @@ import { computed, Signal } from '@angular/core';
 
 import { interpolate } from './interpolate';
 import { TranslationSignal, TranslationsSignal } from './types';
-import { getDeepValue } from './utils';
+import { getTranslation } from './utils';
 
 export function toTranslationsSignal<
   T extends Record<string, unknown>,
@@ -24,7 +24,7 @@ export function toTranslationsSignal<
         return unsafe;
       }
 
-      const valueSig = computed(() => String(getDeepValue(target(), prop.split(separator)) ?? ''));
+      const valueSig = computed(() => getTranslation(target(), prop, separator));
       const sig: TranslationSignal = Object.assign(
         (interpolateParams: Record<string, unknown> | null | undefined) => {
           return interpolateParams ? interpolate(valueSig(), interpolateParams) : valueSig();
