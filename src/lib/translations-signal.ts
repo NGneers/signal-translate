@@ -1,5 +1,6 @@
 import { computed, Signal } from '@angular/core';
 
+import { interpolate } from './interpolate';
 import { TranslationSignal, TranslationsSignal } from './types';
 import { getDeepValue } from './utils';
 
@@ -24,7 +25,13 @@ export function toTranslationsSignal<
       }
 
       const valueSig = computed(() => String(getDeepValue(target(), prop.split(separator)) ?? ''));
-      const sig: TranslationSignal = Object.assign(valueSig, { key: prop });
+      const sig: TranslationSignal = Object.assign(
+        (interpolateParams: Record<string, unknown> | null | undefined) => {
+          return interpolateParams ? interpolate(valueSig(), interpolateParams) : valueSig();
+        },
+        valueSig,
+        { key: prop }
+      );
 
       Object.defineProperty(target, prop, { value: sig });
 

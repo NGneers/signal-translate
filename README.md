@@ -74,10 +74,13 @@ export class TranslateService extends BaseTranslateService<
     <h1>{{ translations.hello() }}</h1>
 
     <!--
-      You can also use the interpolate pipe to interpolate translations
+      You can also pass parameters to the signal to interpolate translations
       `{{ name }}` in the translation will be replaced with the value of the name property
     -->
-    <h2>{{ translations.greetings() | interpolate: { name: 'John' } }}</h2>
+    <h2>{{ translations.greetings({ name: 'John' }) }}</h2>
+
+    <!-- You can also use the interpolate pipe to interpolate strings -->
+    <h2>{{ "Hello {{name}}!" | interpolate: { name: 'John' } }}</h2>
 
     <!--
       You can access translations unsafely with an unspecified string using the _unsafe property.
@@ -102,9 +105,12 @@ export class AppComponent {
   }
 
   public greet(): void {
-    // You can interpolate translations with the interpolate function
+    // You can interpolate translations by passing the values as the argument
     // `{{ name }}` in the translation will be replaced with the value of the name property
-    alert(interpolate(this.translations.greetings(), { name: 'John' }));
+    alert(this.translations.greetings({ name: 'John' }));
+
+    // You can also interpolate strings using the interpolate function
+    alert(interpolate("Hello {{name}}!", { name: 'John' }));
   }
 }
 ```

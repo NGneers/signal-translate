@@ -18,7 +18,9 @@ export type TranslateKeys<T, TSeparator extends string> = T extends object
             }[keyof T]
   : never;
 
-export type TranslationSignal<TKey extends string = string> = Signal<string> & { key: TKey };
+export type TranslationSignal<TKey extends string = string> = Signal<string> & { key: TKey } & ((
+    interpolateParams: Record<string, unknown> | null | undefined
+  ) => string);
 
 export type TranslationsSignal<
   T extends Record<string, unknown>,
