@@ -1,4 +1,5 @@
-import { computed, effect, signal, WritableSignal } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { computed, effect, inject, signal, WritableSignal } from '@angular/core';
 
 import { interpolate } from './interpolate';
 import { toTranslationsSignal } from './translations-signal';
@@ -16,6 +17,7 @@ export abstract class BaseCustomSeperatorTranslateService<
   private readonly _translations = signal<T | undefined>(undefined);
   private readonly _language: WritableSignal<string | null>;
   private readonly _separator: TSeparator;
+  private readonly _document = inject(DOCUMENT);
 
   protected readonly browserLanguage = navigator.language ?? 'en';
   protected readonly setDocumentLangTag: boolean = true;
@@ -38,7 +40,7 @@ export abstract class BaseCustomSeperatorTranslateService<
       const lang = this.language();
 
       if (this.setDocumentLangTag) {
-        document.documentElement.lang = lang;
+        this._document.documentElement.lang = lang;
       }
 
       let getTranslations = this.availableLanguages.includes(lang)
