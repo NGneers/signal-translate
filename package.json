@@ -1,6 +1,6 @@
 {
   "name": "@ngneers/signal-translate",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Translation service that is using signals at its core.",
   "repository": "https://github.com/NGneers/signal-translate.git",
   "author": {
