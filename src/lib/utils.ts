@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 export function isFunctionKey(key: string): key is Extract<keyof Function, string> {
   return (key in Function.prototype && key !== 'constructor') || key === 'prototype';
 }

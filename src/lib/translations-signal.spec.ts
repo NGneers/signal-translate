@@ -1,6 +1,7 @@
 import { signal } from '@angular/core';
-import { toTranslationsSignal } from './translations-signal';
+
 import { interpolate } from './interpolate';
+import { toTranslationsSignal } from './translations-signal';
 
 jest.mock('./interpolate', () => ({
   interpolate: jest.fn((value: string) => `${value} Interpolated`),

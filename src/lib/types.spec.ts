@@ -1,4 +1,5 @@
 import { Signal } from '@angular/core';
+
 import { Expect, Equal, ExtendsBoth } from '../test-types';
 import { TranslateKeys, TranslationSignal, TranslationsSignal } from './types';
 
@@ -28,6 +29,7 @@ describe('TranslateKeys', () => {
         b: unknown[];
         c: Set<unknown>;
         d: Map<unknown, unknown>;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
         e: Function;
       },
       '_'
