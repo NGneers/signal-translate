@@ -1,7 +1,7 @@
-import { Inject, Injectable, InjectionToken, Optional } from '@angular/core';
-import { BaseCustomSeperatorTranslateService, BaseTranslateService } from './translate-service';
 import { TestBed } from '@angular/core/testing';
+
 import { interpolate } from './interpolate';
+import { BaseCustomSeperatorTranslateService, BaseTranslateService } from './translate-service';
 
 jest.mock('./interpolate', () => ({
   interpolate: jest.fn((value: string) => `${value} Interpolated`),
