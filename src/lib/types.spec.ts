@@ -29,7 +29,7 @@ describe('TranslateKeys', () => {
         b: unknown[];
         c: Set<unknown>;
         d: Map<unknown, unknown>;
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+        // eslint-disable-next-line ts/no-unsafe-function-type
         e: Function;
       },
       '_'

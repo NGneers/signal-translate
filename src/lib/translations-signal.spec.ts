@@ -1,14 +1,10 @@
 import { signal } from '@angular/core';
 
-import { interpolate } from './interpolate';
 import { toTranslationsSignal } from './translations-signal';
-
-jest.mock('./interpolate', () => ({
-  interpolate: jest.fn((value: string) => `${value} Interpolated`),
-}));
 
 const testTranslations = {
   a: 'Test A',
+  f: 'Hello {{ data }}',
   b: {
     c: 'Test C',
     d: {
@@ -70,9 +66,7 @@ describe('toTranslationsSignal', () => {
     const originalSignal = signal(testTranslations);
     const translations = toTranslationsSignal(originalSignal, '_');
 
-    const interpolateParams = { data: 'hello' };
-    expect(translations.a(interpolateParams)).toBe('Test A Interpolated');
-
-    expect(interpolate).toHaveBeenCalledWith('Test A', interpolateParams);
+    expect(translations.f()).toBe('Hello {{ data }}');
+    expect(translations.f({ data: 'hello' })).toBe('Hello hello');
   });
 });
