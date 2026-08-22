@@ -7,7 +7,7 @@ export type TranslateKeys<T, TSeparator extends string> = T extends object
       ? never
       : T extends Map<unknown, unknown>
         ? never
-        : // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+        : // eslint-disable-next-line ts/no-unsafe-function-type
           T extends Function
           ? never
           : {

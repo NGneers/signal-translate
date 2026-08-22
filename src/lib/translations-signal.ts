@@ -19,7 +19,7 @@ export function toTranslationsSignal<
       }
 
       if (prop === '_unsafe') {
-        const unsafe = new Proxy(target, this);
+        const unsafe = new Proxy(target, this as ProxyHandler<Signal<T | undefined>>);
         Object.defineProperty(unsafe, '_unsafe', { value: unsafe });
         return unsafe;
       }

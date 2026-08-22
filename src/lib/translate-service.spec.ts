@@ -1,15 +1,12 @@
 import { TestBed } from '@angular/core/testing';
+import { vi, type MockInstance } from 'vitest';
 
-import { interpolate } from './interpolate';
 import { BaseCustomSeperatorTranslateService, BaseTranslateService } from './translate-service';
-
-jest.mock('./interpolate', () => ({
-  interpolate: jest.fn((value: string) => `${value} Interpolated`),
-}));
 
 const testTranslations = {
   en: {
     a: 'Test A (en)',
+    f: 'Hello {{ name }}',
     b: {
       c: 'Test C (en)',
       d: {
@@ -19,6 +16,7 @@ const testTranslations = {
   },
   'en-US': {
     a: 'Test A (en-US)',
+    f: 'Hello {{ name }}',
     b: {
       c: 'Test C (en-US)',
       d: {
@@ -28,6 +26,7 @@ const testTranslations = {
   },
   de: {
     a: 'Test A (de)',
+    f: 'Hallo {{ name }}',
     b: {
       c: 'Test C (de)',
       d: {
@@ -47,7 +46,7 @@ class EnDeTestService extends BaseCustomSeperatorTranslateService<
 
   protected loadTranslations(
     lang: string
-  ): Promise<{ a: string; b: { c: string; d: { e: string } } }> {
+  ): Promise<{ a: string; f: string; b: { c: string; d: { e: string } } }> {
     return Promise.resolve(testTranslations[lang as 'en' | 'de']);
   }
 }
@@ -61,28 +60,28 @@ class EnDeTestServiceWithoutSeparator extends BaseTranslateService<
 
   protected loadTranslations(
     lang: string
-  ): Promise<{ a: string; b: { c: string; d: { e: string } } }> {
+  ): Promise<{ a: string; f: string; b: { c: string; d: { e: string } } }> {
     return Promise.resolve(testTranslations[lang as 'en' | 'de']);
   }
 }
 
-let navigatorLanguageSpy: jest.SpyInstance<string, []>;
+let navigatorLanguageSpy: MockInstance<() => string>;
 let sut: EnDeTestService;
 let sutWithoutSeparator: EnDeTestServiceWithoutSeparator;
 
 beforeEach(async () => {
-  navigatorLanguageSpy = jest.spyOn(window.navigator, 'language', 'get').mockReturnValue('de');
-  jest.useFakeTimers();
+  navigatorLanguageSpy = vi.spyOn(window.navigator, 'language', 'get').mockReturnValue('de');
+  vi.useFakeTimers();
 
   sut = TestBed.runInInjectionContext(() => new EnDeTestService());
   sutWithoutSeparator = TestBed.runInInjectionContext(() => new EnDeTestServiceWithoutSeparator());
 
   TestBed.flushEffects();
-  await jest.runAllTimersAsync();
+  await vi.runAllTimersAsync();
 });
 
 afterEach(() => {
-  jest.useRealTimers();
+  vi.useRealTimers();
 });
 
 describe('BaseCustomSeperatorTranslateService', () => {
@@ -98,35 +97,35 @@ describe('BaseCustomSeperatorTranslateService', () => {
       expect(document.documentElement.lang).toBe('en');
       sut.setLanguage('de');
       TestBed.flushEffects();
-      await jest.runAllTimersAsync();
+      await vi.runAllTimersAsync();
       expect(document.documentElement.lang).toBe('de');
     });
 
     it('should load parent language if language is not available', async () => {
       sut.setLanguage('de-DE');
       TestBed.flushEffects();
-      await jest.runAllTimersAsync();
+      await vi.runAllTimersAsync();
       expect(sut.translations()).toEqual(testTranslations['de']);
     });
 
     it('should use child language if available', async () => {
       sut.setLanguage('en-US');
       TestBed.flushEffects();
-      await jest.runAllTimersAsync();
+      await vi.runAllTimersAsync();
       expect(sut.translations()).toEqual(testTranslations['en-US']);
     });
 
     it('should use first language if language is not available', async () => {
       sut.setLanguage('fr');
       TestBed.flushEffects();
-      await jest.runAllTimersAsync();
+      await vi.runAllTimersAsync();
       expect(sut.translations()).toEqual(testTranslations['de']);
     });
 
     it('should use first language if parent language is not available', async () => {
       sut.setLanguage('fr-FR');
       TestBed.flushEffects();
-      await jest.runAllTimersAsync();
+      await vi.runAllTimersAsync();
       expect(sut.translations()).toEqual(testTranslations['de']);
     });
 
@@ -134,7 +133,7 @@ describe('BaseCustomSeperatorTranslateService', () => {
       const sut = TestBed.runInInjectionContext(() => new EnDeTestService([]));
       sut.setLanguage('fr');
       TestBed.flushEffects();
-      await jest.runAllTimersAsync();
+      await vi.runAllTimersAsync();
       expect(sut.translations()).toEqual(testTranslations['en']);
     });
 
@@ -142,9 +141,9 @@ describe('BaseCustomSeperatorTranslateService', () => {
       sut.setLanguage('de');
       TestBed.flushEffects();
       sut.setLanguage('en');
-      await jest.runAllTimersAsync();
+      await vi.runAllTimersAsync();
       TestBed.flushEffects();
-      await jest.runAllTimersAsync();
+      await vi.runAllTimersAsync();
       expect(sut.translations()).toEqual(testTranslations['en']);
     });
   });
@@ -176,8 +175,8 @@ describe('BaseCustomSeperatorTranslateService', () => {
     });
 
     it('should interpolate a key', () => {
-      expect(sut.translate('a', { value: 'Interpolated' })).toBe('Test A (en) Interpolated');
-      expect(interpolate).toHaveBeenCalledWith('Test A (en)', { value: 'Interpolated' });
+      expect(sut.translate('f')).toBe('Hello {{ name }}');
+      expect(sut.translate('f', { name: 'World' })).toBe('Hello World');
     });
   });
 

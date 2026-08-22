@@ -1,4 +1,4 @@
 .angular/
-.jest/
 dist/
 node_modules/
+coverage/

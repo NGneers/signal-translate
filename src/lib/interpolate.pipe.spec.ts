@@ -1,18 +1,11 @@
-import { interpolate } from './interpolate';
 import { InterpolatePipe } from './interpolate.pipe';
 
-jest.mock('./interpolate');
-
 describe('InterpolatePipe', () => {
-  it('should call interpolate with the given value and params', () => {
+  it('should interpolate the given value with the params', () => {
     const pipe = new InterpolatePipe();
-    const value = 'Hello, {{ name }}!';
-    const params = { name: 'World' };
-    (interpolate as jest.Mock).mockReturnValue('Hello, World!');
 
-    const actual = pipe.transform(value, params);
+    const actual = pipe.transform('Hello, {{ name }}!', { name: 'World' });
 
-    expect(interpolate).toHaveBeenCalledWith(value, params);
     expect(actual).toBe('Hello, World!');
   });
 });

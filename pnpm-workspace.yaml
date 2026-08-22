@@ -1,0 +1,8 @@
+allowBuilds:
+  "@parcel/watcher": false
+  esbuild: false
+  lmdb: false
+  msgpackr-extract: false
+  unrs-resolver: false
+minimumReleaseAgeExclude:
+  - eslint@10.9.0

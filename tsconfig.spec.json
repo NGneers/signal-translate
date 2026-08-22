@@ -2,8 +2,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "rootDir": "./src",
-    "types": ["jest"]
+    "types": ["node", "vitest/globals"]
   },
-  "files": ["src/test.ts"],
+  "files": ["src/test-providers.ts"],
   "include": ["src/**/*.spec.ts"]
 }
